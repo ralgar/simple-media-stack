@@ -1,0 +1,81 @@
+---
+services:
+
+  jellyfin:
+    image: ghcr.io/jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: on-failure:5
+    user: ${JELLYFIN_UID}:${MEDIA_GID}
+    volumes:
+      - ${DATA_ROOT}/jellyfin:/config:Z
+      - ${MEDIA_ROOT}/library:/media/library:z
+    ports:
+      - 8096:8096
+
+  jellyseerr:
+    image: docker.io/fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    restart: on-failure:5
+    user: ${JELLYSEERR_UID}:${JELLYSEERR_UID}
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DATA_ROOT}/jellyseerr:/config:Z
+    ports:
+      - 5055:5055
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: on-failure:5
+    environment:
+      - PUID=${PROWLARR_UID}
+      - PGID=${MEDIA_GID}
+      - TZ=${TZ}
+    volumes:
+      - ${DATA_ROOT}/prowlarr:/config:Z
+      - ${MEDIA_ROOT}/usenet:/media/usenet:z
+    ports:
+      - 9696:9696
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: on-failure:5
+    environment:
+      - PUID=${RADARR_UID}
+      - PGID=${MEDIA_GID}
+      - TZ=${TZ}
+    volumes:
+      - ${DATA_ROOT}/radarr:/config:Z
+      - ${MEDIA_ROOT}:/media:z
+    ports:
+      - 7878:7878
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    restart: on-failure:5
+    environment:
+      - PUID=${SABNZBD_UID}
+      - PGID=${MEDIA_GID}
+      - TZ=${TZ}
+    volumes:
+      - ${DATA_ROOT}/sabnzbd:/config:Z
+      - ${MEDIA_ROOT}:/media:z
+    ports:
+      - 8080:8080
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: on-failure:5
+    environment:
+      - PUID=${SONARR_UID}
+      - PGID=${MEDIA_GID}
+      - TZ=${TZ}
+    volumes:
+      - ${DATA_ROOT}/sonarr:/config:Z
+      - ${MEDIA_ROOT}:/media:z
+    ports:
+      - 8989:8989
