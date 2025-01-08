@@ -1,5 +1,30 @@
 #!/usr/bin/env bash
 
+# Check if we are root
+if [[ $EUID != 0 ]] ; then
+    printf "\e[1;31m${red}ERROR: This script must be run as root. Exiting.\e[0m\n"
+    exit 2
+fi
+
+# Display warning and prompt to continue
+printf "\e[1m\e[33mThis script should only be run ONCE to perform the initial setup. Running it a second time will cause destructive changes.\e[0m\n"
+read -rp "Are you sure you want to run the script? [y/N]: " choice
+
+case "$choice" in
+  y|Y|yes|Yes)
+    printf "You chose to continue. Beginning setup.\n"
+    ;;
+  n|N|no|No|'')
+    printf "You chose to abort. Exiting.\n"
+    exit 0
+    ;;
+  *)
+    printf "ERROR: Invalid input. Exiting.\n"
+    exit 1
+    ;;
+esac
+
+# Begin script
 set -xeu
 
 source .env
@@ -55,3 +80,6 @@ chown -R "$PROWLARR_UID:$MEDIA_GID" "$DATA_ROOT/prowlarr"
 chown -R "$RADARR_UID:$MEDIA_GID" "$DATA_ROOT/radarr"
 chown -R "$SONARR_UID:$MEDIA_GID" "$DATA_ROOT/sonarr"
 chown -R 999:999 "$DATA_ROOT/postgres-init"
+
+# Display completion message
+printf "\n\e[0;32mSetup completed successfully!\e[0m\n"
