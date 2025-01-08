@@ -16,18 +16,43 @@ services:
     image: docker.io/fallenbagel/jellyseerr:latest
     container_name: jellyseerr
     restart: on-failure:5
+    depends_on:
+      postgres:
+        condition: service_healthy
     user: ${JELLYSEERR_UID}:${JELLYSEERR_UID}
     environment:
       - TZ=${TZ}
+      - DB_TYPE=postgres
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=jellyseerr
     volumes:
-      - ${DATA_ROOT}/jellyseerr:/config:Z
+      - ${DATA_ROOT}/jellyseerr:/app/config:Z
     ports:
       - 5055:5055
+
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    restart: on-failure:5
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    volumes:
+      - ${DATA_ROOT}/postgres-init/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - 5432:5432
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     restart: on-failure:5
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
       - PUID=${PROWLARR_UID}
       - PGID=${MEDIA_GID}
@@ -42,6 +67,9 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     restart: on-failure:5
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
       - PUID=${RADARR_UID}
       - PGID=${MEDIA_GID}
@@ -70,6 +98,9 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     restart: on-failure:5
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
       - PUID=${SONARR_UID}
       - PGID=${MEDIA_GID}

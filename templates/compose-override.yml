@@ -1,0 +1,10 @@
+---
+services:
+
+  jellyseerr:
+    environment:
+      DB_PASS: ${JELLYSEERR_DB_PASSWORD}
+
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_ROOT_PASSWORD}
