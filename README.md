@@ -9,15 +9,15 @@ A Docker stack to operate your own media server. Simple, but good.
 
 Deploys the following applications:
 
-| Application    | Type     | Description |
-|:--------------:|:--------:|----------------------------------------------------------------------------|
-| **Jellyfin**   | Frontend | Media server. Has apps for client devices, such as AndroidTV and Roku.     |
-| **Jellyseerr** | Frontend | Automatically handles media requests from end users.                       |
-| **PostgreSQL** | Database | Sophisticated RDBMS for fast and reliable data storage.                    |
-| **Prowlarr**   | Backend  | Allows the administator to easily manage Usenet indexers across the stack. |
-| **Radarr**     | Backend  | PVR system for movies. Searches, downloads, and organizes content.         |
-| **SABnzbd**    | Backend  | Usenet downloader. Handles download requests from the PVR apps.            |
-| **Sonarr**     | Backend  | PVR system for TV series. Searches, downloads, and organizes content.      |
+| Application    | Type     | Port | Description                                                                |
+|:--------------:|:--------:|:----:|----------------------------------------------------------------------------|
+| **Jellyfin**   | Frontend | 8096 | Media server. Has apps for client devices, such as AndroidTV and Roku.     |
+| **Jellyseerr** | Frontend | 5055 | Automatically handles media requests from end users.                       |
+| **PostgreSQL** | Database | 5432 | Sophisticated RDBMS for fast and reliable data storage.                    |
+| **Prowlarr**   | Backend  | 9696 | Allows the administator to easily manage Usenet indexers across the stack. |
+| **Radarr**     | Backend  | 7878 | PVR system for movies. Searches, downloads, and organizes content.         |
+| **SABnzbd**    | Backend  | 8080 | Usenet downloader. Handles download requests from the PVR apps.            |
+| **Sonarr**     | Backend  | 8989 | PVR system for TV series. Searches, downloads, and organizes content.      |
 
 ## Getting Started
 
